@@ -24,11 +24,6 @@ public class ProfilePage {
     @FindBy(how = How.XPATH, using = "//label[text()='Имя']/following-sibling::input")
     public SelenideElement fieldInputName;
 
-    @Step("Залогинен правильный пользователь")
-    public void isUserOnAccount(User user) {
-        fieldInputName.shouldHave(Condition.attribute("value", user.getName()));
-    }
-
     @Step("Выход из аккаунта")
     public void userLogout() {
         btnExitAccount.shouldBe(Condition.exist, Duration.ofMillis(1000)).pressEnter();
