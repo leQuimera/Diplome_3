@@ -1,13 +1,13 @@
-import Objects.User;
-import PageObject.MainPage;
-import Utils.BrowserConfigurations;
-import Utils.EndPoints;
-import com.codeborne.selenide.Selenide;
+import objects.User;
+import pageobject.MainPage;
+import utils.BrowserConfigurations;
+import utils.EndPoints;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.junit.Assert.assertTrue;
 
 public class ConstructorTest extends BrowserConfigurations {
@@ -22,9 +22,7 @@ public class ConstructorTest extends BrowserConfigurations {
 
     @After
     public void tearDown() {
-        Selenide.clearBrowserCookies();
-        Selenide.clearBrowserLocalStorage();
-        Selenide.closeWebDriver();
+        getWebDriver().quit();
     }
 
     @Test

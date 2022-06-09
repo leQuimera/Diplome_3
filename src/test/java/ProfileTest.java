@@ -1,10 +1,10 @@
-import Objects.User;
-import PageObject.LoginPage;
-import PageObject.MainPage;
-import PageObject.ProfilePage;
-import PageObject.RegistrationPage;
-import Utils.BrowserConfigurations;
-import Utils.EndPoints;
+import objects.User;
+import pageobject.LoginPage;
+import pageobject.MainPage;
+import pageobject.ProfilePage;
+import pageobject.RegistrationPage;
+import utils.BrowserConfigurations;
+import utils.EndPoints;
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
@@ -14,6 +14,7 @@ import org.junit.Test;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.WebDriverConditions.url;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class ProfileTest extends BrowserConfigurations {
     private User user;
@@ -35,9 +36,7 @@ public class ProfileTest extends BrowserConfigurations {
 
     @After
     public void tearDown() {
-        Selenide.clearBrowserCookies();
-        Selenide.clearBrowserLocalStorage();
-        Selenide.closeWebDriver();
+        getWebDriver().quit();
     }
 
     @Test

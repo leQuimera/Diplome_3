@@ -1,9 +1,10 @@
-import Objects.User;
-import PageObject.LoginPage;
-import PageObject.MainPage;
-import PageObject.RegistrationPage;
-import Utils.BrowserConfigurations;
-import Utils.EndPoints;
+import objects.User;
+import pageobject.ForgotPasswordPage;
+import pageobject.LoginPage;
+import pageobject.MainPage;
+import pageobject.RegistrationPage;
+import utils.BrowserConfigurations;
+import utils.EndPoints;
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.WebDriverConditions.url;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.junit.Assert.assertTrue;
 
 public class LoginTest extends BrowserConfigurations {
@@ -20,6 +22,7 @@ public class LoginTest extends BrowserConfigurations {
     MainPage mainPage;
     LoginPage loginPage;
     RegistrationPage registrationPage;
+    ForgotPasswordPage forgotPasswordPage;
 
     //Пак тестов сделан на Яндекс браузере. Если поменять местами комментарии
     // (закомментить Яндекс и раскоментить стандартный оператор), то тесты пройдут под Chrome
@@ -28,7 +31,6 @@ public class LoginTest extends BrowserConfigurations {
     public void setUp() {
         user = User.generateNewRandomUser();
         mainPage = page(MainPage.class);
-        loginPage = page(LoginPage.class);
         registrationPage = openYandex(EndPoints.URL_REGISTRATION_PAGE, RegistrationPage.class);
         //registrationPage = open(EndPoints.URL_REGISTRATION_PAGE, RegistrationPage.class);
     }
@@ -37,7 +39,7 @@ public class LoginTest extends BrowserConfigurations {
     public void tearDown() {
         Selenide.clearBrowserCookies();
         Selenide.clearBrowserLocalStorage();
-        Selenide.closeWebDriver();
+        getWebDriver().quit();
     }
 
     @Test
@@ -69,6 +71,8 @@ public class LoginTest extends BrowserConfigurations {
     @Test
     @DisplayName("Вход пользователя на сайт сразу после регистрации")
     public void enterOnSiteAfterRegistration() {
+        loginPage = page(LoginPage.class);
+
         registrationPage.userRegistration(user)
                 .clickOnRegistrationBtn()
                 .clickFieldEmail();
@@ -79,6 +83,15 @@ public class LoginTest extends BrowserConfigurations {
         Selenide.webdriver().shouldHave(url(EndPoints.URL_MAIN_PAGE));
         assertTrue(mainPage.isUserLoginOn());
 
+    }
+
+    @Test
+    @DisplayName("Переход на страницу логина со страницы восстановления пароля")
+    public void transitionToLoginPageFromForgetPasswordPage() {
+        forgotPasswordPage = page(ForgotPasswordPage.class);
+
+        forgotPasswordPage.clickLoginFromResetPasswordPageButton();
+        Selenide.webdriver().shouldHave(url(EndPoints.URL_LOGIN_PAGE));
     }
 
 }
